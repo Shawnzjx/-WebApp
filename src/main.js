@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import 'lib-flexible/flexible'
+import 'lib-flexible'
+
 import App from './App.vue'
 import router from './router'
 

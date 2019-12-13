@@ -9,7 +9,8 @@ import Profile from '../pages/Profile/Profile.vue'
 Vue.use(VueRouter)
 
 export default new VueRouter({
-  mode: 'history',  //history模式
+  mode: 'history',  //history模式 路径中没有#
+  
   routes: [
     {
       path: '/', //重定向的主页

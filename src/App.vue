@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <router-view></router-view>
     <FooterGuide></FooterGuide>
   </div>
@@ -15,9 +15,6 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-  @import "./common/stylus/mixins.styl"
-  #app
-    width 100%
-    height 100%
+<style scoped lang="stylus" rel="stylesheet/stylus">
+
 </style>

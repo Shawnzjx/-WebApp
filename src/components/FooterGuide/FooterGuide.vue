@@ -1,0 +1,15 @@
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  export default {
+  }
+</script>
+
+<style scoped lang="stylus">
+  @import "../../common/stylus/mixins.styl"
+ 
+</style>

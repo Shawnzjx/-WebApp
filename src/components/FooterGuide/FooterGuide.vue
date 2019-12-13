@@ -22,7 +22,7 @@
       <span>
         <i class="iconfont icon-geren"></i>
       </span>
-      <span>个人</span>
+      <span>个人中心</span>
     </div>
   </footer>
 </template>

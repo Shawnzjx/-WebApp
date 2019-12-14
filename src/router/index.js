@@ -20,22 +20,22 @@ export default new VueRouter({
     {
       path: '/msite',
       component: Msite,
-      meta: {isShowFooter: ture}
+      meta: {isShowFooter: true}
     },
     {
       path: '/search',
       component: Search,
-      meta: {isShowFooter: ture}
+      meta: {isShowFooter: true}
     },
     {
       path: '/order',
       component: Order,
-      meta: {isShowFooter: ture}
+      meta: {isShowFooter: true}
     },
     {
       path: '/profile',
       component: Profile,
-      meta: {isShowFooter: ture}
+      meta: {isShowFooter: true}
     },
     {
       path: '/login',

@@ -11,7 +11,7 @@ const postcss = px2rem({
 module.exports = {  //只写vue封装的配置
 
   // runtimeCompiler: true,
-  // lintOnSave: false, // 关闭Eslint提示
+  lintOnSave: false, // 关闭Eslint提示
   css: { // 添加postcss配置
     loaderOptions: {
       postcss: {

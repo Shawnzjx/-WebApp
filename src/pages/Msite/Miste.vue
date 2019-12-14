@@ -307,12 +307,26 @@
         </ul>
       </div>
     </div>
-
   </section>
 </template>
 
 <script type="text/ecmascript-6">
+  import Swiper from 'swiper'
+  // 引swiper样式
+  import 'swiper/css/swiper.css'
+
   export default {
+    mounted() {
+      // swiper对象必须要在列表显示之后创建
+      new Swiper('.swiper-container',{
+        loop: true, //循环模式选项
+
+        // 分页器
+        pagination: {
+          el: '.swiper-pagination',
+        }
+      })
+    },
   }
 </script>
 

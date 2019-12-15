@@ -35,7 +35,7 @@ instance.interceptors.response.use(
 
     // 1. 统一处理异常
     alert('请求出错: '+ error.message)
-    return Promise(()=>{}) // 返回一个pending状态的promise  中断promise链
+    return new Promise(()=>{}) // 返回一个pending状态的promise  中断promise链
   }
 )
 

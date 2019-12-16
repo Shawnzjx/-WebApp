@@ -8,10 +8,13 @@ const postcss = px2rem({
   remUnit: 37.5   
 })
 
-module.exports = {  //只写vue封装的配置
+module.exports = {
+  //只写vue封装的配置
 
   // runtimeCompiler: true,
-  lintOnSave: false, // 关闭Eslint提示
+  // 关闭Eslint提示
+  lintOnSave: false,
+
   css: { // 添加postcss配置
     loaderOptions: {
       postcss: {
@@ -45,6 +48,15 @@ module.exports = {  //只写vue封装的配置
         },
         changeOrigin: true, // 支持跨域, 如果协议/主机也不相同, 必须加上
       },
+    }
+  },
+
+  pluginOptions: {
+    i18n: {
+      locale: 'zh_CN',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: false
     }
   }
 }

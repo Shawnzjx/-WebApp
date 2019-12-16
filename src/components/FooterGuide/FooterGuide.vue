@@ -4,25 +4,25 @@
       <span>
         <i class="iconfont icon-waimai"></i>
       </span>
-      <span>首页</span>
+      <span>{{$t('footer_msite')}}</span>
     </div>
     <div class="guide-item" :class="{on: $route.path==='/search'}" @click="goto('/search')">
       <span>
         <i class="iconfont icon-search"></i>
       </span>
-      <span>搜索</span>
+      <span>{{$t('footer_search')}}</span>
     </div>
     <div class="guide-item" :class="{on: $route.path==='/order'}" @click="goto('/order')">
       <span>
         <i class="iconfont icon-dingdan"></i>
       </span>
-      <span>订单</span>
+      <span>{{$t('footer_order')}}</span>
     </div>
     <div class="guide-item" :class="{on: $route.path==='/profile'}" @click="goto('/profile')">
       <span>
         <i class="iconfont icon-geren"></i>
       </span>
-      <span>个人中心</span>
+      <span>{{$t('footer_profile')}}</span>
     </div>
   </footer>
 </template>
@@ -38,6 +38,7 @@
           // 传对应的路径 编程式路由跳转
           this.$router.replace(path)
         } else {
+          // 如果请求的是当前的, 直接强制刷新
           window.location = path 
         }
       }

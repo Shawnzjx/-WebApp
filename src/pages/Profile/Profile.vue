@@ -1,7 +1,7 @@
 <template>
   <section class="profile">
     <Header title="个人中心"/>
-    <section class="profile-number" @click="$router.push('/login')">
+    <section class="profile-number">
       <a href="javascript:;" class="profile-link">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
@@ -15,7 +15,7 @@
             <span class="icon-mobile-number">暂无绑定手机号</span>
           </p>
         </div>
-        <span class="arrow">
+        <span class="arrow" @click="$router.push('/login')">
           <i class="iconfont icon-jiantou1"></i>
         </span>
       </a>
@@ -88,11 +88,30 @@
         </div>
       </a>
     </section>
+    <section class="profile_my_order border-1px">
+      <mt-button style="width:100%" type="danger" @click="logout">退出登录</mt-button>
+    </section>
   </section>
 </template>
 
 <script type="text/ecmascript-6">
+
+  import {MessageBox} from 'mint-ui'
+
   export default {
+
+    methods: {
+      logout () {
+        MessageBox.confirm('确定执行此操作?').then(
+          ()=> { //点击确认
+            this.$store.dispatch('logout')
+          },
+          ()=> { // 点击取消
+            console.log('点击取消')
+          }
+        )
+      }
+    },
   }
 </script>
 

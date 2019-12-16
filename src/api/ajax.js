@@ -2,6 +2,7 @@
 import axios from 'axios'
 //查询字符串的包
 import qs from 'qs'
+import {Indicator} from 'mint-ui'
 
 const instance = axios.create({
   // baseURL: 'http://localhost:4000' // 出跨域请求
@@ -13,7 +14,11 @@ const instance = axios.create({
 
 //  添加请求拦截器 (统一处理请求参数)
 instance.interceptors.request.use((config)=> {
-  console.log('req interceptors')
+  // 显示请求loading
+  Indicator.open({
+    text: '加载中...',
+    spinnerType: 'fading-circle'
+  })
   const data = config.data
   // 3. 对请求体参数进行urlencode处理,而不使用默认的json方式(后台接口不支持)
   if (data instanceof Object) {
@@ -26,12 +31,14 @@ instance.interceptors.request.use((config)=> {
 //添加响应拦截器
 instance.interceptors.response.use(
   response=> {
-    console.log('res interceptors')
+    //结束loading
+    Indicator.close()
     // return response
     // 2. 异步请求成功的数据不是response, 而是response.data
     return response.data
   },
   error=> {
+    Indicator.close()
 
     // 1. 统一处理异常
     alert('请求出错: '+ error.message)

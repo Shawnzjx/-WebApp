@@ -5,13 +5,18 @@
 import {
   reqAddress,
   reqCategorys,
-  reqShops
+  reqShops,
+  reqAutoLogin
 } from '../api'
 // 函数常量名
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
   RECEIVE_SHOPS,
+  RECEIVE_USER,
+  RECEIVE_TOKEN,
+  RESET_USER,
+  RESET_TOKEN
 } from './mutation-types'
 
 export default {
@@ -52,4 +57,38 @@ export default {
       commit(RECEIVE_SHOPS,shops)
     }
   },
+
+  // 保存用户
+  saveUser ({commit}, user) {
+    const token = user.token
+    // 将token保存到local中
+    localStorage.setItem('token_key',token)
+    // 删除user中的token
+    delete user.token
+    // 将user保存到state
+    commit(RECEIVE_USER,{user})
+    // 将token保存到state
+    commit(RECEIVE_TOKEN,{token})
+  },
+
+  // 自动登录
+  async autoLogin ({commit,state}) {
+    // 必须要有token且没有user信息
+    if (state.token && !state.user._id) {
+      // 发送自动登录请求
+      const result = await reqAutoLogin()
+      //请求成功后
+      if (result.code===0) {
+        const user = result.data // 没有token
+        commit(RECEIVE_USER,{user}) // 保存user
+      }
+    }
+  },
+
+  //退出登录
+  logout ({commit}) {
+    localStorage.removeItem('token_key')
+    commit(RESET_USER)
+    commit(RESET_TOKEN)
+  }
 }

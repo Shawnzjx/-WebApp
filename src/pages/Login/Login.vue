@@ -135,8 +135,28 @@
         }
 
         const success = await this.$validator.validateAll(names) // 对指定的所有表单项进行验证
+        // 如果通过验证, 发送登录请求
+        let result
         if (success) {
-          alert('发送登录请求')
+          const {isShowSms,phone,code,name,pwd,captcha} = this
+          if (isShowSms) { // 短信登录
+            result = await this.$API.reqSmsLogin({phone,code})
+          } else { // 用户名密码登录
+            result = await this.$API.reqPwdLogin({name,pwd,captcha})
+            this.updateCaptcha() // 更新图形验证码
+            this.captcha = '' // 清空图形验证密码输入框
+          }
+
+          //根据请求的结果, 做不同响应处理
+          if (result.code===0) {
+            const user = result.data
+            // 将user数据保存到vuex的state中 token保存到local中
+            this.$store.dispatch('saveUser',user)
+            // 跳转到个人中心
+            this.$router.replace({path:'/profile'})
+          } else {
+            MessageBox('提示',result.msg)
+          }
         }
       },
 
@@ -155,6 +175,7 @@
         // 保存新的locale
         localStorage.setItem('locale_key', locale)
       }
+
     },
   }
 </script>

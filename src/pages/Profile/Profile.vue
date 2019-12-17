@@ -1,21 +1,21 @@
 <template>
   <section class="profile">
     <Header title="个人中心"/>
-    <section class="profile-number">
+    <section class="profile-number" @click="$router.push(user._id ? '/userinfo' : '/login')">
       <a href="javascript:;" class="profile-link">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
         </div>
         <div class="user-info">
-          <p class="user-info-top">登录/注册</p>
-          <p>
+          <p class="user-info-top" v-if="!user.phone">{{user.name ? user.name : '登录/注册'}}</p>
+          <p v-if="!user.name">
             <span class="user-icon">
               <i class="iconfont icon-shouji icon-mobile"></i>
             </span>
-            <span class="icon-mobile-number">暂无绑定手机号</span>
+            <span class="icon-mobile-number">{{user.phone ? user.phone : '暂无绑定手机号'}}</span>
           </p>
         </div>
-        <span class="arrow" @click="$router.push('/login')">
+        <span class="arrow">
           <i class="iconfont icon-jiantou1"></i>
         </span>
       </a>
@@ -23,15 +23,15 @@
     <section class="profile_info_data border-1px">
       <ul class="info_data_list">
         <a href="javascript:;" class="info_data_link">
-          <span class="info_data_top"><span>0.00</span>元</span>
+          <span class="info_data_top"><span>0.00</span> 元</span>
           <span class="info_data_bottom">我的余额</span>
         </a>
         <a href="javascript:;" class="info_data_link">
-          <span class="info_data_top"><span>0</span>个</span>
+          <span class="info_data_top"><span>0</span> 个</span>
           <span class="info_data_bottom">我的优惠</span>
         </a>
         <a href="javascript:;" class="info_data_link">
-          <span class="info_data_top"><span>0</span>分</span>
+          <span class="info_data_top"><span>0</span> 分</span>
           <span class="info_data_bottom">我的积分</span>
         </a>
       </ul>
@@ -88,17 +88,21 @@
         </div>
       </a>
     </section>
-    <section class="profile_my_order border-1px">
+    <section class="profile_my_order border-1px" v-show="user._id">
       <mt-button style="width:100%" type="danger" @click="logout">退出登录</mt-button>
     </section>
   </section>
 </template>
 
 <script type="text/ecmascript-6">
-
+  import {mapState} from 'vuex'
   import {MessageBox} from 'mint-ui'
 
   export default {
+
+    computed: {
+      ...mapState(['user'])
+    },
 
     methods: {
       logout () {
@@ -159,6 +163,7 @@
                 font-size 30px
                 vertical-align text-top
             .icon-mobile-number
+              margin-left 8px
               font-size 14px
               color #fff
         .arrow

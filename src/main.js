@@ -8,7 +8,7 @@ import Header from './components/Header'
 import Star from './components/Star'
 import store from './vuex/store'
 import './validate'
-import * as API from './api'
+import * as API from './api' // 使用这种暴露方法可以将所暴露的数据方法API对象中
 import i18n from './i18n'
 
 Vue.config.productionTip = false

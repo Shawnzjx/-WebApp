@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import FooterGuide from './components/FooterGuide/FooterGuide.vue'
+import FooterGuide from './components/FooterGuide'
 export default {
 
   async mounted() {

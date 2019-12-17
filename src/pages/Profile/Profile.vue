@@ -120,6 +120,7 @@
   // 个人中心
   .profile 
     width 100%
+    overflow hidden
     .profile-number
       margin-top 45.5px
       .profile-link

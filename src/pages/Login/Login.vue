@@ -12,15 +12,21 @@
         <form>
           <div :class="{on: isShowSms}">
             <section class="login_message">
-              <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+              <input type="text" maxlength="11" placeholder="手机号" v-model="phone" 
+                name="phone" v-validate="'required|mobile'">
               <button 
-                :disabled=" !isRightPhone" class="get_verification" 
+                :disabled=" !isRightPhone || computeTime>0" class="get_verification" 
                 :class="{right_phone_number: isRightPhone}"
                 @click.prevent="sendCode"
-              >获取验证码</button>
+              >
+                {{computeTime>0 ? `短信已发送(${computeTime})` : '获取验证码'}}
+              </button>
+              <span style="color: red;" v-show="errors.has('phone')">{{ errors.first('phone') }}</span>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码">
+              <input type="text" maxlength="6" placeholder="验证码" v-model="code"
+                name="code" v-validate="{required: true,regex: /^\d{6}$/}">
+              <span style="color: red;" v-show="errors.has('code')">{{ errors.first('code') }}</span>
             </section>
             <section class="login_hint">
               温馨提示：未注册小橘外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -30,22 +36,32 @@
           <div :class="{on: !isShowSms}">
             <section>
               <section class="login_message">
-                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                <input type="text" placeholder="用户名" v-model="name"
+                  name="name" v-validate="{required: true}">
+                <span style="color: red;" v-show="errors.has('name')">{{ errors.first('name') }}</span>
               </section>
               <section class="login_verification">
-                <input :type="isShowPwd ? 'text' : 'password'" maxlength="8" placeholder="密码">
+                <input :type="isShowPwd ? 'text' : 'password'" placeholder="密码" v-model="pwd"
+                  name="pwd" v-validate="{required: true}">
                 <div class="switch_button off" :class="isShowPwd ? 'on' : 'off'" @click="isShowPwd = !isShowPwd">
                   <div class="switch_circle" :class="{right:isShowPwd}"></div>
                   <span class="switch_text">{{isShowPwd ? '' : ''}}</span>
                 </div>
+                <span style="color: red;" v-show="errors.has('pwd')">{{ errors.first('pwd') }}</span>
               </section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <input type="text" maxlength="4" placeholder="验证码" v-model="captcha"
+                  name="captcha" v-validate="{required: true,regex: /^[0-9a-zA-Z]{4}$/}">
+                <!-- 当前发送的是一个跨域的http请求(不是ajax请求), 没有跨域问题 -->
+                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha"
+                @click="updateCaptcha" ref="captcha">
+                <!-- 原本404 利用代理服务器转发请求4000的接口,解决跨域 -->
+                <!-- <img class="get_verification" src="/api/captcha" alt="captcha"> -->
+                <span style="color: red;" v-show="errors.has('captcha')">{{ errors.first('captcha') }}</span>
               </section>
             </section>
           </div>
-          <button class="login_submit">{{$t('login_login')}}</button>
+          <button class="login_submit" @click.prevent="login">{{$t('login_login')}}</button>
         </form>
         <a href="javascript:;" class="about_us">{{$t('login_aboutUs')}}</a>
         <br>
@@ -60,14 +76,20 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {Toast,MessageBox} from 'mint-ui'
   export default {
     name: 'Login',
 
     data() {
       return {
-        isShowSms: true,  // 是否展示短信登录界面
-        phone: '', 
+        isShowSms: false,  // true 展示短信登录界面  false 展示用户密码登录界面
+        phone: '', // 手机号
+        code: '', // 短信验证码
+        name: '', // 用户名
+        pwd: '', // 密码
+        captcha: '', // 图形验证码
         isShowPwd: false, // 密码是否可见
+        computeTime: 0, // 计时剩余时间
       }
     },
     
@@ -79,8 +101,49 @@
     },
 
     methods: {
-      sendCode () {
-        console.log('-----')
+
+      // 发向指定手机号送验证码
+      async sendCode () {
+        // 进行倒计时效果显示
+        this.computeTime = 15
+        const timeId = setInterval(() => {
+          this.computeTime--
+          if (this.computeTime<=0) {
+            this.computeTime = 0
+            clearInterval(timeId)
+          }
+        }, 1000);
+
+        // 发ajax请求
+        const result = await this.$API.reqSendCode(this.phone)
+        if (result.code===0) {
+          Toast('验证码短信已发送')
+        } else {
+          // 停止倒计时
+          this.computeTime = 0
+          MessageBox('提示',result.msg || '发送失败')
+        }
+      },
+
+      async login(){
+        // 进行前台表单验证
+        let names
+        if (this.isShowSms) {
+          names = ['phone','code']
+        } else {
+          names = ['name','pwd','captcha']
+        }
+
+        const success = await this.$validator.validateAll(names) // 对指定的所有表单项进行验证
+        if (success) {
+          alert('发送登录请求')
+        }
+      },
+
+      // 点击切换图形验证码
+      updateCaptcha (){
+        // 点击切换验证码的http请求路径
+        this.$refs.captcha.src = 'http://localhost:4000/captcha?time' + Date.now()
       },
 
       // 切换语言

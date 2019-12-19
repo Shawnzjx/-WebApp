@@ -35,3 +35,12 @@ export const reqSmsLogin = ({phone,code})=> ajax.post('/login_sms',{phone,code})
 
 // 7. 自动登录
 export const reqAutoLogin = ()=> ajax.get('/auto_login')
+
+// 8. 获取食物信息数组
+export const reqGoods = ()=> ajax('/goods')
+
+// 9. 获取食物评价数组
+export const reqRatings = ()=> ajax('/ratings')
+
+// 10. 获取商铺信息
+export const reqInfo = ()=> ajax('/info')

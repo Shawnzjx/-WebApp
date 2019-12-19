@@ -6,10 +6,12 @@ import App from './App.vue'
 import router from './router'
 import Header from './components/Header'
 import Star from './components/Star'
+import CartControl from './components/CartControl'
 import store from './vuex/store'
 import './validate'
 import * as API from './api' // 使用这种暴露方法可以将所暴露的数据方法API对象中
 import i18n from './i18n'
+import './mock/mock-server' // 引入mock解析
 
 Vue.config.productionTip = false
 
@@ -19,6 +21,7 @@ Vue.prototype.$API = API
 //注册全局组件
 Vue.component('Header', Header)
 Vue.component('Star', Star)
+Vue.component('CartControl', CartControl)
 Vue.component(Button.name, Button) // mt-button
 
 new Vue({

@@ -6,7 +6,10 @@ import {
   reqAddress,
   reqCategorys,
   reqShops,
-  reqAutoLogin
+  reqAutoLogin,
+  reqGoods,
+  reqRatings,
+  reqInfo
 } from '../api'
 // 函数常量名
 import {
@@ -16,7 +19,12 @@ import {
   RECEIVE_USER,
   RECEIVE_TOKEN,
   RESET_USER,
-  RESET_TOKEN
+  RESET_TOKEN,
+  RECEIVE_GOODS,
+  RECEIVE_RATINGS,
+  RECEIVE_INFO,
+  ADD_FOOD_COUNT,
+  REDUCE_FOOD_COUNT
 } from './mutation-types'
 
 export default {
@@ -71,7 +79,7 @@ export default {
     commit(RECEIVE_TOKEN,{token})
   },
 
-  // 自动登录
+  // 自动登录的异步action
   async autoLogin ({commit,state}) {
     // 必须要有token且没有user信息
     if (state.token && !state.user._id) {
@@ -90,5 +98,47 @@ export default {
     localStorage.removeItem('token_key')
     commit(RESET_USER)
     commit(RESET_TOKEN)
+  },
+
+  // 异步获取商家食品列表
+  async getShopGoods ({commit},callback) {
+    const result = await reqGoods()
+    if (result.code===0) {
+      const goods = result.data
+      commit(RECEIVE_GOODS, {goods})
+      // 如果组件中传递了接收消息的回调函数,数据更新后,调用回调通知调用的组件
+      typeof callback === 'function' && callback()
+    }
+  },
+
+  // 异步获取商家评价列表
+  async getShopRatings ({commit},callback) {
+    const result = await reqRatings()
+    if (result.code===0) {
+      const ratings = result.data
+      commit(RECEIVE_RATINGS, {ratings})
+      // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
+      typeof callback === 'function' && callback()
+    }
+  },
+
+  // 异步获取商家信息
+  async getShopInfo ({commit}, callback) {
+    const result = await reqInfo()
+    if (result.code===0) {
+      const info = result.data
+      commit(RECEIVE_INFO, {info})
+      typeof callback === 'function' && callback()
+    }
+  },
+
+  // 更新food中的数量的同步action
+  updateFoodCount ({commit},{isAdd,food}) {
+    if (isAdd) {
+      commit(ADD_FOOD_COUNT,{food})
+    } else {
+      commit(REDUCE_FOOD_COUNT,{food})
+    }
   }
+
 }

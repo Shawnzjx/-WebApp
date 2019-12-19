@@ -8,4 +8,7 @@ export default {
   shops: [], //商家数组
   user: {}, // 用户信息
   token: localStorage.getItem('token_key') || '', // 当前用户登录的标记
+  goods: [], // 商家食物列表
+  ratings: [], // 商家评价列表
+  info: {}, // 商家信息
 }

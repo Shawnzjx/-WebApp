@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="goods">
       <!-- 菜单容器 -->
       <div class="menu-wrapper" ref="left">
@@ -22,7 +23,8 @@
           <li class="food-list-hook" v-for="(good, index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px" v-for="(food, index) in good.foods" :key="index">
+              <li class="food-item bottom-border-1px" v-for="(food, index) in good.foods" 
+                :key="index" @click="showFood(food)">
                 <div class="icon">
                   <img width="57" height="57" :src="food.icon">
                 </div>
@@ -46,11 +48,15 @@
         </ul>
       </div>
     </div>
+    <!-- 组件标签对象就是组件对象 -->
+    <Food :food="food" ref="food"/>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
+  import Food from '../../../components/Food'
 
   export default {
 
@@ -59,12 +65,16 @@
         // 右侧列表滑动的Y轴坐标: scrollY 在滑动过程中不断改变
         scrollY: 0,
         // 右侧每个分类的 li 的top值的数组tops 第一次列表显示后统计后面不再变化
-        tops: []
+        tops: [],
+        // 需要显示的food
+        food: {},
       }
     },
     
     computed: {
-      ...mapState(['goods']),
+      ...mapState({
+        goods: state => state.shop.goods
+      }),
 
       currentIndex () {
         const {scrollY,tops} = this
@@ -142,6 +152,18 @@
 
         // 让右侧列表滑动到对应的位置
         this.rightScroll.scrollTo(0, -top , 300)
+      },
+
+      /*
+        父组件调用子组件的方法: ref
+        子组件调用父组件的方法: props
+      */
+      // 显示food
+      showFood (food) {
+        // 更新数据
+        this.food = food
+        // 显示food组件界面
+        this.$refs.food.toggleShow()
       }
     },
 
@@ -154,7 +176,9 @@
       }
     },
 
-
+    components: {
+      Food
+    }
   }
 </script>
 

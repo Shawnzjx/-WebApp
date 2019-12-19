@@ -108,7 +108,14 @@
 
     computed: {
       // 动态显示地址 从state中
-      ...mapState(['address','categorys','shops']),
+      ...mapState({
+        // address: 'address', // 总的state没有address
+        // categorys: 'categorys',
+        // shops: 'shops'
+        address : state => state.msite.address, // state是总状态 函数的返回就是计算属性值
+        categorys : state => state.msite.categorys,
+        shops : state => state.msite.shops
+      }),
 
       // 根据一维数组生成二维数组
       // 包含所有分类的二维数组

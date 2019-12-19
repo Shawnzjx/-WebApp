@@ -47,6 +47,7 @@
           </li>
         </ul>
       </div>
+      <ShopCart/>
     </div>
     <!-- 组件标签对象就是组件对象 -->
     <Food :food="food" ref="food"/>
@@ -57,6 +58,7 @@
   import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
   import Food from '../../../components/Food'
+  import ShopCart from '../../../components/ShopCart'
 
   export default {
 
@@ -177,7 +179,8 @@
     },
 
     components: {
-      Food
+      Food,
+      ShopCart,
     }
   }
 </script>

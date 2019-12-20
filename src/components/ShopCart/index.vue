@@ -22,7 +22,7 @@
         <div class="shopcart-list" v-show="listShow">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
+            <span class="empty" @click="clearCart">清空</span>
           </div>
           <div class="list-content" ref="cartFoods">
             <ul>
@@ -45,8 +45,10 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {MessageBox} from 'mint-ui'
   import BScroll from 'better-scroll'
   import {mapState,mapGetters} from 'vuex'
+  import {CLEAR_CART} from '../../vuex/mutation-types'
 
   export default {
 
@@ -125,6 +127,14 @@
         if (this.totalCount>0) {
           this.isShow = !this.isShow
         }
+      },
+
+      clearCart () {
+        MessageBox.confirm('确定清空吗').then(
+          () => {
+            this.$store.commit(CLEAR_CART)
+          }
+        )
       }
     },
   }
